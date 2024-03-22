@@ -1,7 +1,9 @@
 import {expect, test} from '@playwright/test'
+import { LanguageMenu } from '../page_object/assertionRegPage'
+import { RegistrationForm } from '../page_object/regform'
 
 test.beforeEach(async ({ page }) => {
-    await page.goto('https://staging.office-management.padcllc.com/auth/register');
+    await page.goto('https://staging.devstride.padcllc.com/auth/register');
   
   });
 
@@ -31,13 +33,13 @@ test.beforeEach(async ({ page }) => {
 
   test('Click logo', async ({ page }) => {
 
-  await page.locator('[class="_logo_15vbi_7"]').click()
+  await page.locator('[class="_logo_r9ut2_7"]').click()
 
   //Assertion
 
-  const loginPageUrl = 'https://staging.office-management.padcllc.com/'
+  const loginPageUrl = 'https://staging.devstride.padcllc.com/'
 
-  await expect(loginPageUrl).toEqual('https://staging.office-management.padcllc.com/')
+  await expect(loginPageUrl).toEqual('https://staging.devstride.padcllc.com/')
 
   })
 
@@ -45,15 +47,18 @@ test.beforeEach(async ({ page }) => {
 
   test('Registration Language dropdown menu', async ({ page }) => {
 
-    const languageMenu = page.locator('.ant-select-selector').first()
-    await languageMenu.click()
+    //const languageMenu = page.locator('.ant-select-selector').first()
+    const languageMenu = new LanguageMenu(page)
+    await languageMenu.langMenu()
 
-  // Select Armenian
+    // Select Armenian
 
-   await page.getByTitle('Հայերեն').click()
+    await languageMenu.langArm()
+
+    // await page.getByTitle('Հայերեն').click()
    
-   const titleTextArm = page.locator('[class="_texts_3g91m_114"]')
-   const secondText = page.locator('._aboutText_3g91m_154')
+    const titleTextArm = page.locator('[class="_texts_3g91m_114"]')
+    const secondText = page.locator('._aboutText_3g91m_154')
 
 
    //Assertion Title in Armenian
@@ -68,10 +73,12 @@ test.beforeEach(async ({ page }) => {
 
   test('Language Dropdown English', async ({ page }) => {
 
-    const languageMenu = page.locator('.ant-select-selector').first()
-    await languageMenu.click()
+    const languageMenu = new LanguageMenu(page)
+    await languageMenu.langMenu()
 
-    await page.getByTitle('English').click()
+    await languageMenu.langEng()
+
+    //await page.getByTitle('English').nth(1).click()
 
     const titleTextEng = page.locator('[class="_texts_3g91m_114"]')
     const secondText = page.locator('._aboutText_3g91m_154')
@@ -88,12 +95,14 @@ test.beforeEach(async ({ page }) => {
 
   test('Language Dropdown Russian', async ({ page }) => {
 
-    const languageMenu = page.locator('.ant-select-selector').first()
-    await languageMenu.click()
+    const languageMenu = new LanguageMenu(page)
+    await languageMenu.langMenu()
 
-    await page.getByTitle('Русский').click()
+    await languageMenu.langRuss()
 
-  //Assertion Title in Russian
+    //await page.getByTitle('Русский').click()
+
+    //Assertion Title in Russian
 
     const titleTextRus = page.locator('[class="_texts_3g91m_114"]')
     const secondText = page.locator('._aboutText_3g91m_154')
@@ -113,9 +122,9 @@ test.beforeEach(async ({ page }) => {
 
     //Assertion URL of the Login page
 
-    const loginPageUrl = 'https://staging.office-management.padcllc.com/'
+    const loginPageUrl = 'https://staging.devstride.padcllc.com/'
 
-    await expect(loginPageUrl).toEqual('https://staging.office-management.padcllc.com/')
+    await expect(loginPageUrl).toEqual('https://staging.devstride.padcllc.com/')
 
 
   })
@@ -165,10 +174,10 @@ test.beforeEach(async ({ page }) => {
 
     await page.getByRole('button', { name: 'Sign Up' }).click()
 
-    const languageMenu = page.locator('.ant-select-selector').first()
-    await languageMenu.click()
+    const languageMenu = new LanguageMenu(page)
+    await languageMenu.langMenu()
 
-    await page.getByTitle('Հայերեն').click()
+    await languageMenu.langArm()
 
     const errorMessUserName = await page.locator('#register_username_help')
     const errorMessFirstName = await page.locator('#register_firstName_help')
@@ -199,10 +208,10 @@ test.beforeEach(async ({ page }) => {
 
     await page.getByRole('button', { name: 'Sign Up' }).click()
 
-    const languageMenu = page.locator('.ant-select-selector').first()
-    await languageMenu.click()
+    const languageMenu = new LanguageMenu(page)
+    await languageMenu.langMenu()
 
-    await page.getByTitle('Русский').click()
+    await languageMenu.langRuss()
 
     const errorMessUserName = await page.locator('#register_username_help')
     const errorMessFirstName = await page.locator('#register_firstName_help')
@@ -274,10 +283,10 @@ test.beforeEach(async ({ page }) => {
       await page.locator('#register_confirm').fill('     ')
       await page.locator('[class="ant-btn css-1fwaatc ant-btn-primary _submitButton_3g91m_229"]').click()
 
-      const languageMenu = page.locator('.ant-select-selector').first()
-      await languageMenu.click()
+      const languageMenu = new LanguageMenu(page)
+      await languageMenu.langMenu()
 
-      await page.getByTitle('Հայերեն').click()
+      await languageMenu.langArm()
 
 
   
@@ -316,9 +325,9 @@ test.beforeEach(async ({ page }) => {
       await page.locator('#register_confirm').fill('     ')
       await page.locator('[class="ant-btn css-1fwaatc ant-btn-primary _submitButton_3g91m_229"]').click()
 
-      const languageMenu = page.locator('.ant-select-selector').first()
-      await languageMenu.click()
-      await page.getByTitle('Русский').click()
+      const languageMenu = new LanguageMenu(page)
+      await languageMenu.langMenu()
+      await languageMenu.langRuss()
 
       //Assertion error messages texts in Armenian
   
@@ -371,10 +380,18 @@ test.beforeEach(async ({ page }) => {
 
     test('Logo', async ({ page }) => {
 
-      const logo =  await page.locator('[class="_logo_15vbi_7"]')  
+      const logo =  await page.locator('[class="_logo_r9ut2_7"]')  
 
-      await expect(logo).toHaveAttribute('src', "https://api-staging.office-management.padcllc.com/uploads/logo/1/file_1708072227428_ac061572-d9f4-49bf-85a2-894416832c7a.png?authorization=")
+      await expect(logo).toHaveAttribute('src', "https://api-staging.devstride.padcllc.com/uploads/logo/1/file_1709542854088_dc42800f-5df4-4f41-af3e-5b782b0a26e1.jpeg?authorization=")
       
+    })
+
+    //15. Register new user(Parametrized method)
+
+    test('Register new user, parametrized method', async ({ page }) => {
+      const regform = new RegistrationForm(page)
+      await regform.fillRegistrationFormWithValidData('TestUsher', 'TestTatvevik', 'TestAvetisyan', 'ximocvvo1326@azduan.com', '+37498149874', 'Test123*', 'Test123*')
+
     })
 
     
@@ -382,4 +399,3 @@ test.beforeEach(async ({ page }) => {
     
 
     
-
